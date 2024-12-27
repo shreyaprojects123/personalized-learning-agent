@@ -3,66 +3,80 @@ from textwrap import dedent
 
 class LearningPathTasks:
     @staticmethod
+    def calculate_days(time_frame: str) -> int:
+        """Convert time frame to number of days"""
+        time_mapping = {
+            "1 week": 7,
+            "2 weeks": 14,
+            "1 month": 30,
+            "3 months": 90,
+            "6 months": 180,
+            "1 year": 365
+        }
+        return time_mapping.get(time_frame, 7)  # Default to 7 days if time frame not found
+
+    @staticmethod
     def create_tasks(agents, topics, skill_level, time_frame):
+        # Calculate number of days/modules
+        num_days = LearningPathTasks.calculate_days(time_frame)
+        
         design_curriculum = Task(
             description=dedent(f"""
-                Create a curriculum for topics: {', '.join(topics)}
-                Skill level: {skill_level}
-                Time frame: {time_frame}
+                Create a {num_days}-day learning path for: {', '.join(topics)}
+                Student level: {skill_level}
                 
-                Include:
-                1. Clear learning objectives
-                2. Module breakdown
-                3. Time estimates
-                4. Prerequisites
-                5. Expected outcomes
+                IMPORTANT: Create EXACTLY {num_days} modules, one for each day.
+                Each day's module should be completable within 1-2 hours of focused learning.
                 
-                Focus on making the content accessible and engaging.
-            """),
-            agent=agents['curriculum_designer']
-        )
-
-        curate_resources = Task(
-            description=dedent("""
-                Find beginner-friendly resources for each module:
-                1. Video tutorials
-                2. Interactive exercises
-                3. Reading materials
-                4. Practice projects
+                Format your response EXACTLY as this JSON structure:
+                {{
+                    "overview": "A detailed overview of the complete {num_days}-day learning path",
+                    "modules": [
+                        {{
+                            "title": "Day X: Clear module title",
+                            "content": {{
+                                "introduction": "Today's learning objectives and overview",
+                                "sections": [
+                                    {{
+                                        "title": "Section Title",
+                                        "content": "Detailed textbook-style explanation",
+                                        "examples": [
+                                            {{
+                                                "scenario": "Example description",
+                                                "explanation": "Example explanation"
+                                            }}
+                                        ]
+                                    }}
+                                ],
+                                "summary": "Today's key takeaways"
+                            }},
+                            "quiz": [
+                                {{
+                                    "question": "Practice question",
+                                    "options": ["A", "B", "C", "D"],
+                                    "correct_answer": "A",
+                                    "explanation": "Why this is correct"
+                                }}
+                            ]
+                        }}
+                    ],
+                    "milestones": [
+                        "Day 1: First milestone",
+                        "Day 2: Second milestone",
+                        ...and so on for {num_days} days
+                    ]
+                }}
                 
-                Ensure resources are:
-                - Easy to understand
-                - Well-explained
-                - Practical and hands-on
-            """),
-            agent=agents['resource_curator'],
-            dependencies=[design_curriculum]
+                Make sure to:
+                1. Create exactly {num_days} modules
+                2. Title each module as 'Day X: [Topic]'
+                3. Make each day's content manageable within 1-2 hours
+                4. Progress logically from basic to advanced concepts
+                5. Include daily milestones
+                
+                REMEMBER: Return ONLY the JSON structure, no other text."""),
+            agent=agents['curriculum_designer'],
+            expected_output=f"A valid JSON string containing a {num_days}-day learning path"
         )
 
-        create_exercises = Task(
-            description=dedent("""
-                Create practical exercises that:
-                1. Start very simple
-                2. Build confidence gradually
-                3. Include detailed explanations
-                4. Provide immediate feedback opportunities
-                5. Connect to real-world applications
-            """),
-            agent=agents['exercise_creator'],
-            dependencies=[design_curriculum]
-        )
-
-        design_tracking = Task(
-            description=dedent("""
-                Create a progress tracking system with:
-                1. Clear milestones
-                2. Simple self-assessment tools
-                3. Progress indicators
-                4. Achievement markers
-                5. Confidence-building checkpoints
-            """),
-            agent=agents['progress_tracker'],
-            dependencies=[design_curriculum, create_exercises]
-        )
-
-        return [design_curriculum, curate_resources, create_exercises, design_tracking]
+        return [design_curriculum]

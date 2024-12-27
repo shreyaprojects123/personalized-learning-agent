@@ -1,22 +1,29 @@
 # AI Learning Path Creator 
 
-An intelligent learning path generator built with CrewAI and GPT-4 that creates personalized educational content for any topic. Perfect for self-learners and educators looking to create structured learning experiences.
+An intelligent learning path generator built with CrewAI that creates personalized, day-by-day learning paths for any topic. The system generates textbook-style content, complete with examples, quizzes, and daily milestones.
 
 ## Features 
 
-- **Personalized Learning Paths**: Generate custom learning paths for any topic
-- **Adaptive Content**: Adjusts to user's skill level and time commitment
-- **Comprehensive Modules**: Daily structured content with learning objectives and examples
-- **Interactive Quizzes**: Test understanding with end-of-chapter assessments
-- **Progress Tracking**: Monitor learning progress through milestones
+- **Personalized Learning**: Adapts to your skill level and available time
+- **Day-by-Day Structure**: One module per day, designed for 1-2 hours of focused learning
+- **Rich Content**:
+  - Detailed textbook-style explanations
+  - Real-world examples
+  - Interactive quizzes
+  - Daily progress milestones
+- **Flexible Time Frames**: From 1 week to 1 year
+- **Adjustable Complexity**: Choose how technical or simplified you want the content
+
+## Demo
+https://substack.com/@shreyabhargava/note/p-153654935
+
 
 ## Tech Stack 
 
-- Backend: FastAPI
-- Frontend: Streamlit
-- AI Framework: CrewAI
-- Language Model: GPT-4
-- Python 3.9+
+- **Backend**: FastAPI + CrewAI
+- **Frontend**: Streamlit
+- **AI Engine**: GPT-4 (via CrewAI)
+- **Language**: Python 3.9+
 
 ## Installation 
 
@@ -37,34 +44,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the root directory and add your OpenAI API key:
-```env
-OPENAI_API_KEY=your_api_key_here
-```
-
-## Project Structure 
-
-```
-personalized-learning-instructor/
-├── .env                    # Environment variables
-├── README.md              # Project documentation
-├── requirements.txt       # Project dependencies
-├── src/
-│   ├── __init__.py
-│   ├── main.py           # FastAPI application
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── schemas.py    # Pydantic models
-│   ├── crew/
-│   │   ├── __init__.py
-│   │   ├── agents.py     # CrewAI agents
-│   │   └── tasks.py      # CrewAI tasks
-│   └── api/
-│       ├── __init__.py
-│       └── routes.py     # API routes
-└── frontend/
-    └── app.py            # Streamlit frontend
-```
+4. Set up environment variables:
+   - Create a `.env` file in the root directory
+   - Add your OpenAI API key:
+     ```
+     OPENAI_API_KEY=your_api_key_here
+     ```
 
 ## Usage 
 
@@ -78,41 +63,44 @@ uvicorn src.main:app --reload
 streamlit run frontend/app.py
 ```
 
-3. Open your browser and navigate to `http://localhost:8501`
+3. Open your browser and go to http://localhost:8501
 
-4. Enter your learning preferences:
-   - Topic(s) you want to learn
-   - Current skill level
-   - Time commitment
-   - Desired content complexity
+4. Create your learning path:
+   - Enter the topic(s) you want to learn
+   - Select your current skill level
+   - Choose your time commitment
+   - Adjust the content complexity
+   - Click "Create Learning Path"
+
+## Project Structure 
+
+```
+learning-path-creator/
+├── src/
+│   ├── main.py           # FastAPI application
+│   ├── models/
+│   │   └── schemas.py    # Data models
+│   └── crew/
+│       ├── agents.py     # CrewAI agents
+│       └── tasks.py      # CrewAI tasks
+├── frontend/
+│   └── app.py           # Streamlit interface
+├── requirements.txt
+└── README.md
+```
 
 ## How It Works 
 
-The application uses two specialized AI agents:
+The system uses CrewAI to orchestrate specialized AI agents:
+1. **Curriculum Designer**: Structures the overall learning journey
+2. **Content Generator**: Creates detailed educational content
+3. **Progress Tracker**: Designs milestones and assessments
 
-1. **Course Designer Agent**: 
-   - Structures the overall learning journey
-   - Creates logical progression of topics
-   - Determines appropriate pacing
+These agents collaborate to create a comprehensive learning experience tailored to your needs.
 
-2. **Content Generator Agent**: 
-   - Creates detailed educational content
-   - Generates examples and exercises
-   - Develops assessment questions
 
-These agents collaborate to create a comprehensive learning experience tailored to the user's needs.
+## Acknowledgments 🙏
 
-## API Endpoints 
-
-- `POST /api/learning-path`: Generate a new learning path
-- `POST /api/chapter/{day}`: Generate detailed content for a specific day
-- `GET /health`: Check API health
-
-## Contributing 
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
+- [CrewAI](https://github.com/joaomdmoura/crewAI)
+- [Streamlit](https://streamlit.io/)
+- [FastAPI](https://fastapi.tiangolo.com/)

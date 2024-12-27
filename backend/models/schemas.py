@@ -5,15 +5,15 @@ class LearningPathRequest(BaseModel):
     topics: List[str]
     skill_level: str
     time_frame: str
-    simplification_level: int  # 1-5, where 5 is most simplified/dumbed down
+    simplification_level: int
 
 class Resource(BaseModel):
     type: str
     title: str
-    url: Optional[str]
     description: str
     difficulty: str
     time_to_complete: str
+    url: Optional[str] = None
 
 class Module(BaseModel):
     title: str
@@ -21,12 +21,8 @@ class Module(BaseModel):
     learning_objectives: List[str]
     resources: List[Resource]
     exercises: List[str]
-    estimated_time: str
 
 class LearningPath(BaseModel):
-    topics: List[str]
-    skill_level: str
-    time_frame: str
     overview: str
     prerequisites: List[str]
     modules: List[Module]
